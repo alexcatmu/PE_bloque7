@@ -1,0 +1,129 @@
+# DADES source url
+# DADES DAT
+
+source(url("http://www-eio.upc.es/teaching/pe/read-data"))
+
+# si les dades estan en full de càlcul:
+# a full càlcul cal seleccionar i fer copy de les dades
+# DAT <- read.table("clipboard",header=T,dec=",") 
+# si no tenen nom les columnes treure header i vigilar decimals amb , o .
+
+
+DAT  # o edit(DAT)
+# veure té columnes op mysql i post
+
+attach(DAT)
+# fixem el nom del data frame -- a partir d'aqui ens podem referir directam a les columnes
+# sense afegir el nom del data frame
+
+# repas Est Desc Univ VAD
+table(op)
+barplot(table(op))
+
+
+# repas Est Desc Univ VAC mysql
+summary(mysql)
+var(mysql)
+sd(mysql)
+par(mfrow=c(1,2))		
+hist(mysql)
+boxplot(mysql)
+
+
+
+# fer Est Desc Univ VAC post
+summary(post)
+var(post)
+sd(post,na.rm=T)
+par(mfrow=c(1,2))		
+hist(post)
+boxplot(post)
+
+
+
+
+# repas Est Desc Biv de mysql i post
+boxplot(mysql)
+boxplot(post)
+boxplot(mysql,post)
+cor(mysql,post,use="complete.obs")
+par(mfrow=c(1,1))
+plot(mysql,post)
+
+
+# analisis normalitat
+par(mfrow=c(1,2))		
+
+hist(mysql)
+qqnorm(mysql)
+qqline(mysql)
+
+hist(log(mysql))
+qqnorm(log(mysql))
+qqline(log(mysql))
+
+hist(log(post))
+qqnorm(log(post))
+qqline(log(post))
+
+hist(log(mysql)-log(post))
+qqnorm(log(mysql)-log(post))
+qqline(log(mysql)-log(post))
+
+
+##### PH i IC 1 mostra #####
+
+t.test(log(mysql),mu=log(0.05))
+t.test(log(mysql),mu=log(0.05),alternative='less')
+
+t.test(log(post),mu=log(0.05))
+t.test(log(post),mu=log(0.05),conf.level=0.90)
+
+
+
+
+##### PH i IC 2 mostres aparellades #####
+
+d <- log(mysql)-log(post)
+hist(d)  
+qqnorm(d)  
+qqline(d) 
+t.test(log(mysql),log(post),paired=T)    # o bé t.test(d,mu=0)
+t.test(log(mysql),log(post),paired=T,alternative='less')
+
+
+##### PH i IC 2 mostres independents #####
+
+logm_i <- log(DAT$mysql[1:24])
+logm_d <- log(DAT$mysql[25:65])
+var.test(logm_i,logm_d)
+t.test(logm_i,logm_d,var.equal=T)
+
+
+### R – Funció Bland-Altman:
+
+BlandAltman <- function(y1,y2,tit){
+Bmean <- (y1+y2)/2
+Bdif <- y2-y1
+ymax <- max(abs(Bdif))
+plot(Bmean ,Bdif ,ylim=c(-ymax,ymax),
+xlab="Mitjanes",
+ylab="Diferències",
+main=tit,pch=19)
+abline(h=0,lty=2)
+mtext("Y2 més gran",2,line= 0.5,
+at=1.1*ymax,adj=1,cex=0.7)
+mtext("Y1 més gran",2,line= 0.5,
+at=-1.1*ymax,adj=1,cex=0.7)
+}
+
+x1<-c(4.5,4.8,3.2,7.5,8.2,5.3,5.4)
+x2<-c(5.3,5.2,3.9,9.2,8.8,5.4,5.8)
+tit<-"Comparativa mostres aparellades"
+BlandAltman(x1,x2,tit)
+
+
+
+
+
+

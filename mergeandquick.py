@@ -34,8 +34,8 @@ def mergeSort(array):
 
     # divide array in half and merge sort recursively
     half = len(array) // 2
-    left = merge_sort(array[:half])
-    right = merge_sort(array[half:])
+    left = mergeSort(array[:half])
+    right = mergeSort(array[half:])
 
     return merge(left, right)
 
@@ -94,29 +94,34 @@ FIN QUICKSORT
 
 
 
-a = []
-mergeArray = []
-quickArray = []
+#n = input("Tamano del vector aleatorio: ")
+f_merge=open("merge_data.txt", "w+")
+f_quick=open("quick_data.txt", "w+")
+n = 500000
+for i in range(40):
+    a = []
+    mergeArray = []
+    quickArray = []
 
-n = input("Tamano del vector aleatorio: ")
+    for j in range(n):
+        num = random.randint(0,n)
+        a.append(num)
+        mergeArray.append(num)
+        quickArray.append(num)
+    time1 = time()
+    mergeSort(mergeArray)
+    time2 = time()
+    time_mergeSort = time2 - time1
+    time3 = time()
+    quickSort(quickArray)
+    time4 = time()
+    time_quickSort = time4 - time3
+    
+    f_merge.write(str(time_mergeSort) + '\n')
+    f_quick.write(str(time_quickSort) + '\n')
+    print(time_mergeSort, time_quickSort)
+f_merge.close()
+f_quick.close()
+    #print_array(a)
 
-for i in range(n):
-    num = random.randint(0,n)
-    a.append(num)
-    mergeArray.append(num)
-    quickArray.append(num)
-
-#print_array(a)
-
-
-
-time1 = time()
-mergeSort(mergeArray)
-time2 = time()
-print(time2 - time1)
-
-time3 = time()
-quickSort(quickArray)
-time4 = time()
-print(time4 - time3)
 

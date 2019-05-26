@@ -3,8 +3,17 @@ quick <- read.delim("./quick_data.txt", sep ="\n", header = FALSE, dec =".")
 diff = (merge-quick)
 diff_df <- data.frame(diff)
 data<-data.frame(merge,quick)
+
+mean(merge$V1)
+mean(quick$V1)
+mean(diff_df$V1)
+var(diff_df$V1)
+
+t.test(diff_df$V1, alternative = "greater")
+
 boxplot(data, names=c("Merge","Quick"))
 boxplot(diff, names=c("Merge"))
+boxplot((diff_, names=c("Mer")))
 
 hist(merge$V1, main= "time")
 hist(quick$V1, main= "time")

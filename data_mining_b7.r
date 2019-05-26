@@ -12,8 +12,7 @@ var(diff_df$V1)
 t.test(diff_df$V1, alternative = "greater")
 
 boxplot(data, names=c("Merge","Quick"))
-boxplot(diff, names=c("Merge"))
-boxplot((diff_, names=c("Mer")))
+boxplot(diff, names=c("Diff"))
 
 hist(merge$V1, main= "time")
 hist(quick$V1, main= "time")
